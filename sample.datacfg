@@ -1,0 +1,32 @@
+{
+    "issued_date": datetime.datetime(2016, 6, 23),
+    "client": "CHEN Xin",
+    "items": [
+        {
+            "action": "PV",
+            "config": {
+                "eventKey": "enterShareProblemPage",
+                "serverTime": {"$gte": datetime.datetime(2016,6,15), "$lt": datetime.datetime(2016,6,22)}
+            }
+        },
+        {
+            "action": "funnel",
+            "sequence": ["enterHome", "clickHomeToLogin", "clickLPSignupNow"],
+            "desc": ["进入欢迎页", "点击登录", "点击去注册"],
+            "haveChild": True,
+            "haveRelations": False,
+            "havePV": True,
+            "haveChronology": False,
+            "funnelSettings": {
+                "PV": (0,1),
+                "child": ((1, "clickHomeToSignup"),)
+            },
+            "userType": "device",
+            "config": {
+                "serverTime": {"$gte": datetime.datetime(2016,6,15), "$lt": datetime.datetime(2016,6,22)},
+                "os": "android"
+            }
+        }
+    ],
+    "cacheData": True
+}
