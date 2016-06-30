@@ -1,14 +1,13 @@
 # _*_ coding:utf-8 _*_
 from pymongo import MongoClient
 import os
-import datetime
 import codecs
 
 from .db import *
 from .tools import *
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-config_path = PATH +'/examples/sample.datacfg'
+config_path = PATH +'/examples/x.datacfg'
 f = codecs.open(config_path, 'r', 'utf8').read()
 x = eval(f)
 
