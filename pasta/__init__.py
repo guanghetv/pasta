@@ -7,11 +7,6 @@ from .db import *
 from .tools import *
 PATH = os.path.dirname(os.path.abspath(__file__))
 
-config_path = PATH +'/examples/x.datacfg'
-f = codecs.open(config_path, 'r', 'utf8').read()
-x = eval(f)
-
-
 def parse_config(config_dict):
     if config_dict['cacheData']:
         cache_data(config_dict)

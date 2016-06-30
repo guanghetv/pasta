@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import sys
+import codecs
+import datetime
+import json
+import pprint
+import pasta
+print(sys.argv)
+parse_type = sys.argv[1] # 'it' for single, 'them' for all
+
+def generate_result(res):
+    if "tag" in res.keys():
+        tag_string = res["tag"]
+    else:
+        tag_string = "notag"
+    date_string = str(res["issuedDate"].isoformat()).split("T")[0],
+    result_file = "./M-%s-%s-%s.json" %(date_string, res["client"].replace(" ", ""), tag_string)
+    f = codecs.open(result_file, 'w+', 'utf8')
+    pp = pprint.PrettyPrinter(indent=4)
+    f.write(pp.pformat(res))
+    f.close()
+
+
+if parse_type == 'it':
+    f = codecs.open(sys.argv[2], 'r', 'utf8').read()
+    config = eval(f)
+    result = pasta.parse_config(config)
+    generate_result(result)
+

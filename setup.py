@@ -11,4 +11,5 @@ setup(name='pasta',
       install_requires=[
           'pymongo'
       ],
+      scripts=["bin/pasta"],
       zip_safe=False)
