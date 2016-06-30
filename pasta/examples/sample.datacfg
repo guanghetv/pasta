@@ -1,9 +1,10 @@
 {
-    "issued_date": datetime.datetime(2016, 6, 23),
+    "issued_date": datetime.datetime.now(),
     "client": "CHEN Xin",
     "items": [
         {
             "action": "PV",
+            "havePV": False,
             "config": {
                 "eventKey": "enterShareProblemPage",
                 "serverTime": {"$gte": datetime.datetime(2016,6,15), "$lt": datetime.datetime(2016,6,22)}
