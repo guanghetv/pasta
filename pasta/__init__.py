@@ -17,7 +17,7 @@ f = codecs.open(config_path, 'r', 'utf8').read()
 
 x = eval(f)
 
-def cache_data( config_dict):
+def cache_data(config_dict):
     temp_events.drop()
     union_query = {
         "eventKey": {"$in": []},
