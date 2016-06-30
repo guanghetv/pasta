@@ -11,7 +11,7 @@ db = MongoClient(db_path)['eventsV35']
 events = db['eventV35']
 temp_events = db['tempEvents']
 
-config_path = 'sample.datacfg'
+config_path = PATH +'/examples/sample.datacfg'
 
 f = codecs.open(config_path, 'r', 'utf8').read()
 

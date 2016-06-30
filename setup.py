@@ -8,4 +8,7 @@ setup(name='pasta',
       author_email='hongfei@guanghe.tv',
       license='MIT',
       packages=['pasta'],
+      install_requires=[
+          'pymongo'
+      ],
       zip_safe=False)
