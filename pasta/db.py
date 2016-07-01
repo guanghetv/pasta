@@ -44,7 +44,7 @@ def cache_data(config_dict):
     elif union_query['serverTime']['$gte'] > union_query['serverTime']['$lt']:
         union_query['serverTime'].pop('$gte')
 
-    if len(union_query['serverTime']) == 0:
+    if "serverTime" in union_query.keys() and len(union_query['serverTime']) == 0:
         union_query.pop('serverTime', None)
     print(union_query)
     x = events.find(union_query)

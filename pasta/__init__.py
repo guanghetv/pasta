@@ -1,11 +1,10 @@
 # _*_ coding:utf-8 _*_
-from pymongo import MongoClient
-import os
-import codecs
-
+import os, re
 from .db import *
 from .tools import *
+
 PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 def parse_config(config_dict):
     if config_dict['cacheData']:
@@ -29,9 +28,10 @@ def parse_config(config_dict):
             r = funnel(act_events, unit_item)
             results['items'][i]['result'] = r
 
+        if unit_item["action"] is "ratio":
+            r = ratio(act_events, unit_item)
+            results['items'][i]['result'] = r
+
     temp_events.drop()
 
     return results
-
-
-

@@ -1,5 +1,4 @@
 # _*_ coding:utf-8 _*_
-
 def PV(col, action_config):
     if action_config['haveGroup']:
         pipeline = [
@@ -39,3 +38,27 @@ def funnel(col, action_config):
         result.append(len(step_users))
 
     return (tuple(result), tuple(PV_result))
+
+
+def ratio(col, action_config):
+    numerator_cfg = action_config['numerator']
+    denominator_cfg = action_config['denominator']
+
+    if numerator_cfg["action"] is "PV":
+        numerator_res = PV(col, numerator_cfg)
+    elif numerator_cfg["action"] is "UV":
+        numerator_res = UV(col, numerator_cfg)
+    else:
+        raise ("Error: Unknown numerator action type.")
+
+    if denominator_cfg["action"] is "PV":
+        denominator_res = PV(col, denominator_cfg)
+    elif denominator_cfg["action"] is "UV":
+        denominator_res = UV(col, denominator_cfg)
+    else:
+        raise ("Error: Unknown denominator action type.")
+
+    if denominator_res == 0:
+        raise ("Error: denominator equals zero")
+    else:
+        return float(numerator_res) / denominator_res
