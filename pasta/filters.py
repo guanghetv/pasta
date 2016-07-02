@@ -97,7 +97,7 @@ def payable_course(course_db, publisher="人教版", subject="math", status="pub
     return result
 
 
-def full_topic(course_db, topic_list):
+def full_topics(course_db, topic_list):
     list_id = [ObjectId(x) for x in topic_list]
     x = course_db['topics'].find({"_id": {"$in": list_id}})
     result = []
@@ -114,18 +114,17 @@ def full_topic(course_db, topic_list):
 
     return result
 
-# # {
-# #     "type": "course.payable",
-# #     "apply": {
-# #         "numerator.config.eventValue.topicId": {"$in": ">>topic<<"},
-# #         "denominator.config.eventValue.topicId": {"$in": ">>topic<<"}
-# #     }
-# class Filter:
-#     type = ""
-#     def __init__(self, filter_dict):
-#         self.type = filter_dict['type']
-#         self.subclass = self.type.split('.')[0]
-#
-#         if self.subclass == 'course':
-#             course = Course()
-#             self.result = eval(self.type)
+
+def filters(db, filter_cfg):
+    unit_rule = filter_cfg['rule']
+    if unit_rule['type'] == 'course':
+        # course filters
+        if unit_rule['filter'] == 'payable_course':
+            result = payable_course(db)
+
+        # topic options
+        if 'options' in unit_rule and len(unit_rule['options']) > 0:
+            if 'full_topics' in unit_rule['options'] and unit_rule['options']['full_topics']:
+                result['topic_id'] = full_topics(db, result['topic_id'])
+
+    return result

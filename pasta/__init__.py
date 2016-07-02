@@ -2,8 +2,17 @@
 import os, re
 from .db import *
 from .tools import *
+from .filters import *
 
 PATH = os.path.dirname(os.path.abspath(__file__))
+
+
+def get_from_dict(dataDict, mapList):
+    return reduce(lambda d, k: d[k], mapList, dataDict)
+
+
+def set_in_dict(dataDict, mapList, value):
+    get_from_dict(dataDict, mapList[:-1])[mapList[-1]] = value
 
 
 def parse_config(config_dict):
@@ -15,12 +24,17 @@ def parse_config(config_dict):
 
     results = dict(config_dict)
     for i in range(0, len(results['items'])):
-        unit_item = results['items'][i]
+        unit_item = config_dict['items'][i]
         # filters
-        # if 'filter' in unit_item:
-        #     for f in unit_item['filter']:
+        if 'filter' in unit_item:
+            for f in unit_item['filter']:
+                r = filters(site_db, f)
+                apply_info = f['apply']
+                for k, v in apply_info.items():
+                    conds = k.split('.')
+                    set_in_dict(unit_item, conds, {"$in": r[v]})
 
-        # provide actions
+        # actions
         if unit_item["action"] is "PV":
             r = PV(act_events, unit_item)
             results['items'][i]['result'] = r
