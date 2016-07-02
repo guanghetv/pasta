@@ -16,6 +16,11 @@ def parse_config(config_dict):
     results = dict(config_dict)
     for i in range(0, len(results['items'])):
         unit_item = results['items'][i]
+        # filters
+        # if 'filter' in unit_item:
+        #     for f in unit_item['filter']:
+
+        # provide actions
         if unit_item["action"] is "PV":
             r = PV(act_events, unit_item)
             results['items'][i]['result'] = r

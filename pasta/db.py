@@ -4,6 +4,7 @@ import datetime
 
 db_path = '10.8.8.111:27017'
 db = MongoClient(db_path)['eventsV35']
+site_db = MongoClient(db_path)['onions']
 
 events = db['eventV35']
 temp_events = db['tempEvents']
