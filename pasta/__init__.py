@@ -1,5 +1,6 @@
 # _*_ coding:utf-8 _*_
 import os, re
+from functools import reduce
 from .db import *
 from .tools import *
 from .filters import *
@@ -23,6 +24,7 @@ def parse_config(config_dict):
         act_events = events
 
     results = dict(config_dict)
+    config_dict = dict(config_dict)
     for i in range(0, len(results['items'])):
         unit_item = config_dict['items'][i]
         # filters

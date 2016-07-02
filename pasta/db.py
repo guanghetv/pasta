@@ -29,6 +29,17 @@ def cache_data(config_dict):
                 child_list = each['funnelSettings']['child']
                 union_query['eventKey']['$in'] += [k[1] for k in child_list]
 
+        if each['action'] is 'ratio':
+            if 'eventKey' in each['numerator']['config'] and type(each['numerator']['config']['eventKey']) is str:
+                union_query['eventKey']['$in'].append(each['numerator']["config"]["eventKey"])
+            elif 'eventKey' in each['numerator']['config'] and '$in' in each['numerator']['config']['eventKey']:
+                union_query['eventKey']['$in'] += each['numerator']['config']['eventKey']['$in']
+
+            if 'eventKey' in each['denominator']['config'] and type(each['denominator']['config']['eventKey']) is str:
+                union_query['eventKey']['$in'].append(each['denominator']["config"]["eventKey"])
+            elif 'eventKey' in each['denominator']['config'] and '$in' in each['denominator']['config']['eventKey']:
+                union_query['eventKey']['$in'] += each['denominator']['config']['eventKey']['$in']
+
         if 'serverTime' in each['config'] and '$gte' in each['config']['serverTime']:
             if each['config']['serverTime']['$gte'] < union_query['serverTime']['$gte']:
                 union_query['serverTime']['$gte'] = each['config']['serverTime']['$gte']
