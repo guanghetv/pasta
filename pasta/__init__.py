@@ -45,7 +45,7 @@ def parse_config(config_dict):
                 r = filters(site_db, f)
                 apply_info = f['apply']
                 for k, v in apply_info.items():
-                    conds = k.split('.')
+                    conds = k.split('->')
                     set_in_dict(unit_item, conds, {"$in": r[v]})
 
         # actions

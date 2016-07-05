@@ -19,23 +19,40 @@ def funnel(col, action_config):
     PV_result = []
     sequence = action_config['sequence']
     i = 0
+    cache_users = {}
     query = dict(action_config['config'])
     query["eventKey"] = sequence[i]
+    if action_config['haveStepConfig'] and '0' in action_config['funnelSettings']['stepConfig']:
+        query.update(action_config['funnelSettings']['stepConfig']['0'].copy())
     step_users = col.distinct(action_config['userType'], query)
+    if action_config['haveParent'] and '0' in action_config['funnelSettings']['parent'].values():
+        cache_users['0'] = step_users
     result.append(len(step_users))
 
-    if action_config['havePV'] and 0 in action_config['funnelSettings']['PV']:
+    if action_config['haveStepPV'] and 0 in action_config['funnelSettings']['stepPV']:
         step_pv = col.count(query)
         PV_result.append((0, step_pv))
 
     for i in range(1, len(sequence)):
         query["eventKey"] = sequence[i]
-        query[action_config["userType"]] = {"$in": step_users}
-        if action_config['havePV'] and i in action_config['funnelSettings']['PV']:
+        if action_config['havaParent'] and str(i) in action_config['funnelSettings']['parent']:
+            parent_users = cache_users[str(action_config['funnelSettings']['parent'][str(i)])]
+            query[action_config["userType"]] = {'$in': parent_users}
+        else:
+            query[action_config["userType"]] = {"$in": step_users}
+
+        if action_config['haveStepConfig'] and str(i) in action_config['funnelSettings']['stepConfig']:
+            query.update(action_config['funnelSettings']['stepConfig'][str(i)].copy())
+
+        step_users = col.distinct(action_config['userType'], query)
+        if action_config['haveParent'] and str(i) in action_config['funnelSettings']['parent'].values():
+            cache_users[str(i)] = step_users
+
+        result.append(len(step_users))
+
+        if action_config['haveStepPV'] and i in action_config['funnelSettings']['stepPV']:
             step_pv = col.count(query)
             PV_result.append((i, step_pv))
-        step_users = col.distinct(action_config['userType'], query)
-        result.append(len(step_users))
 
     return (tuple(result), tuple(PV_result))
 
