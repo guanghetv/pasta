@@ -97,6 +97,25 @@ def payable_course(course_db, publisher="人教版", subject="math", status="pub
     return result
 
 
+def free_course(course_db, publisher="人教版", subject="math", status="published"):
+    c = Course(course_db, publisher="人教版", subject="math", status="published")
+    result = {
+        "chapter_id": [],
+        "theme_id": [],
+        "topic_id": []
+    }
+    for chapter in c.chapters:
+        if len(chapter['freeTopic']) > 0:
+            result["chapter_id"].append(str(chapter['id']))
+
+    for theme in c.themes:
+        if len(theme['freeTopic']) > 0:
+            result['theme_id'].append(str(theme['id']))
+            result['topic_id'] += [str(x) for x in theme['freeTopic']]
+
+    return result
+
+
 def full_topics(course_db, topic_list):
     list_id = [ObjectId(x) for x in topic_list]
     x = course_db['topics'].find({"_id": {"$in": list_id}})
@@ -121,6 +140,8 @@ def filters(db, filter_cfg):
         # course filters
         if unit_rule['filter'] == 'payable_course':
             result = payable_course(db)
+        if unit_rule['filter'] == 'free_course':
+            result = free_course(db)
 
         # topic options
         if 'options' in unit_rule and len(unit_rule['options']) > 0:
