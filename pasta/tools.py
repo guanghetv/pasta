@@ -44,8 +44,12 @@ def funnel(col, action_config):
         if action_config['haveStepConfig'] and str(i) in action_config['funnelSettings']['stepConfig']:
             query.update(action_config['funnelSettings']['stepConfig'][str(i)].copy())
 
-        step_users = col.distinct(action_config['userType'], query)
-        if action_config['haveParent'] and str(i) in action_config['funnelSettings']['parent'].values():
+        if action_config['haveExclusion'] and i in action_config['funnelSettings']['exclusion']:
+            temp_step = col.distinct(action_config['userType'], query)
+            step_users = list(set(step_users).difference(set(temp_step)))
+        else:
+            step_users = col.distinct(action_config['userType'], query)
+        if action_config['haveParent'] and i in action_config['funnelSettings']['parent'].values():
             cache_users[str(i)] = step_users
 
         result.append(len(step_users))
@@ -60,17 +64,22 @@ def funnel(col, action_config):
 def ratio(col, action_config):
     numerator_cfg = action_config['numerator']
     denominator_cfg = action_config['denominator']
+    common_config = action_config['config']
 
     if numerator_cfg["action"] is "PV":
+        numerator_cfg['config'].update(common_config.copy())
         numerator_res = PV(col, numerator_cfg)
     elif numerator_cfg["action"] is "UV":
+        numerator_cfg['config'].update(common_config.copy())
         numerator_res = UV(col, numerator_cfg)
     else:
         raise ("Error: Unknown numerator action type.")
 
     if denominator_cfg["action"] is "PV":
+        denominator_cfg['config'].update(common_config.copy())
         denominator_res = PV(col, denominator_cfg)
     elif denominator_cfg["action"] is "UV":
+        denominator_cfg['config'].update(common_config.copy())
         denominator_res = UV(col, denominator_cfg)
     else:
         raise ("Error: Unknown denominator action type.")
