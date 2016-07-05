@@ -35,7 +35,7 @@ def funnel(col, action_config):
 
     for i in range(1, len(sequence)):
         query["eventKey"] = sequence[i]
-        if action_config['havaParent'] and str(i) in action_config['funnelSettings']['parent']:
+        if action_config['haveParent'] and str(i) in action_config['funnelSettings']['parent']:
             parent_users = cache_users[str(action_config['funnelSettings']['parent'][str(i)])]
             query[action_config["userType"]] = {'$in': parent_users}
         else:
