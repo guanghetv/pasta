@@ -14,7 +14,7 @@ def generate_result(res):
         tag_string = res["tag"]
     else:
         tag_string = "notag"
-    date_string = str(res["issuedDate"].isoformat()).split("T")[0],
+    date_string = str(res["issued_date"].isoformat()).split("T")[0],
     result_file = "./M-%s-%s-%s.json" %(date_string, res["client"].replace(" ", ""), tag_string)
     f = codecs.open(result_file, 'w+', 'utf8')
     pp = pprint.PrettyPrinter(indent=4)
