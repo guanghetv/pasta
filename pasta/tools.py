@@ -58,7 +58,12 @@ def funnel(col, action_config):
             step_pv = col.count(query)
             PV_result.append((i, step_pv))
 
-    return (tuple(result), tuple(PV_result))
+    ratio_result = []
+    if action_config['haveRatio']:
+        for i in range(1, len(result)):
+            ratio_result.append(float(result[i]) / result[i - 1])
+
+    return (tuple(result), tuple(PV_result), tuple(ratio_result))
 
 
 def ratio(col, action_config):
