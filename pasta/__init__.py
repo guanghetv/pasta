@@ -17,6 +17,18 @@ def set_in_dict(dataDict, mapList, value):
 
 
 def parse_config(config_dict):
+    results = dict(config_dict)
+    config_dict = dict(config_dict)
+    # if requirement contains global config, assign them to each of the items
+    if 'config' in config_dict:
+        for item in config_dict['items']:
+            if 'config' in item:
+                # merge two configs
+                temp_dict = config_dict['config'].copy()
+                item['config'].update(temp_dict)
+            else:
+                item['config'] = dict(config_dict['config'])
+
     if config_dict['cacheData']:
         cache_data(config_dict)
         act_events = temp_events
